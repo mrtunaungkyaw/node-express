@@ -1,10 +1,10 @@
 # node-express Tutorial
 
-npm i express
-npm i typescript
-npm i dotenv
-npm i -D @type/express
-npm i -D ts-node-dev
+- _npm i express_
+- _npm i typescript_
+- _npm i dotenv_
+- _npm i -D @type/express_
+- _npm i -D ts-node-dev_
 
 
 
