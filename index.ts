@@ -1,9 +1,36 @@
-import express from "express";
+import dotenv from "dotenv";
+import express, { Request, Response } from "express";
 import userRouter from "./Route/userRouter";
+
+dotenv.config();
+
 const app = express();
 const PORT = 3000;
 
+const apiUrl = process.env.API_URL;
+
+const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type=text/javascript>
+        localStorage.setItem("apiUrl", "${apiUrl}")
+        window.location.href = "/"
+    </script>
+</body>
+</html>
+`;
+
 app.use(express.static("public"));
+
+app.get("/api", (req: Request, res: Response) => {
+    res.send(html);
+});
 
 app.use("/users", userRouter);
 

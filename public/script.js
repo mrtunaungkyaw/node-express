@@ -1,20 +1,12 @@
-// const fetchData = async () => {
-//     try {
-//         const url = "https://dummyjson.com/products";
-//         const response = await fetch(url);
-//         const data = await response.json();
-//         console.log(data.products);
-//     } catch (err) {
-//         console.log(err);
-//     }
-// };
-
-// fetchData();
-
 const getUser = async () => {
-    const response = await fetch("http://localhost:3000/users");
-    const userData = await response.json();
-    console.log(userData);
+    const apiUrl = localStorage.getItem("apiUrl");
+    if (apiUrl) {
+        const response = await fetch(`${apiUrl}/users`);
+        const userData = await response.json();
+        console.log(userData);
+    } else {
+        window.location.href = "/api";
+    }
 };
 
 getUser();
@@ -35,13 +27,26 @@ const handleCreateRegister = async () => {
     // console.log(userData);
 };
 
-const handleFileUpload = async () => {
-    const inputTag = document.getElementById("fileUpload");
-    console.log(inputTag.files);
-    const response = await fetch("http://localhost:3000/fileUpload", {
-        method: "POST",
-        body: inputTag.files[0],
-    });
-    const data = await response.json();
-    console.log(data);
-};
+// const handleFileUpload = async () => {
+//     const inputTag = document.getElementById("fileUpload");
+//     console.log(inputTag.files);
+//     const response = await fetch("http://localhost:3000/fileUpload", {
+//         method: "POST",
+//         body: inputTag.files[0],
+//     });
+//     const data = await response.json();
+//     console.log(data);
+// };
+
+// const fetchData = async () => {
+//     try {
+//         const url = "https://dummyjson.com/products";
+//         const response = await fetch(url);
+//         const data = await response.json();
+//         console.log(data.products);
+//     } catch (err) {
+//         console.log(err);
+//     }
+// };
+
+// fetchData();
