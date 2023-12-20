@@ -1,3 +1,4 @@
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import userRouter from "./Route/userRouter";
@@ -27,12 +28,17 @@ const html = `
 `;
 
 app.use(express.static("public"));
+app.use(bodyParser.json());
 
 app.get("/api", (req: Request, res: Response) => {
     res.send(html);
 });
 
 app.use("/users", userRouter);
+
+app.listen(PORT, () => {
+    console.log(`server is listening on port ${PORT}`);
+});
 
 // // middleware function
 // app.get("/", (req, res) => {
@@ -51,7 +57,7 @@ app.use("/users", userRouter);
 // });
 
 // app.post("/fileUpload", (req, res) => {
-//     req.res.status(200).send("DELETE Method");
+//     req.res.status(200).send("POST Method");
 // });
 
 // app.route middleware
@@ -68,7 +74,3 @@ app.use("/users", userRouter);
 //     .delete((req, res) => {
 //         res.send("create book DELETE Method");
 //     });
-
-app.listen(PORT, () => {
-    console.log(`server is listening on port ${PORT}`);
-});
