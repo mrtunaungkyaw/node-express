@@ -28,6 +28,20 @@ const showUser = (userData) => {
     }
 };
 
+const handleUploadImage = async (e) => {
+    const apiUrl = localStorage.getItem("apiUrl");
+    const file = e.target.files;
+    console.log(file);
+    const response = await fetch(`${apiUrl}/uploadImage`, {
+        method: "POST",
+        headers: { "Content-Type": "image/jpg" },
+        body: file[0],
+    });
+    const { fileName, type } = await response.json();
+    const profileImage = (document.querySelector("#profile").src = `/userImage/${fileName}.${type}`);
+    console.log(profileImage);
+};
+
 const getUser = async () => {
     const apiUrl = localStorage.getItem("apiUrl");
     if (apiUrl) {
