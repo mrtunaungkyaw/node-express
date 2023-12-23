@@ -1,3 +1,9 @@
+const profileImage = document.querySelector("#profile");
+const plusIcon = document.querySelector(".bi-plus-square-dotted");
+const nameTag = document.querySelector("#name");
+const emailTag = document.querySelector("#email");
+const ageTag = document.querySelector("#age");
+
 const showUser = (userData) => {
     const userListContainer = document.querySelector("#user-list-container");
     userListContainer.innerHTML = "";
@@ -8,19 +14,37 @@ const showUser = (userData) => {
         userCardBody.classList.add("card-body");
         const user = userData[i];
         userCardBody.innerHTML = `
-        <div>
-        <div class="input-group mb-3">
-        <input type="text" class="w-100 form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1" value="${user.name}" id="name${user.id}">
+        <div style="height:90%">
+            <div class="d-flex justify-content-center" style="height:50%" >
+                <div class="w-50 h-100 d-flex align-item-center mb-3">
+                    <label class="position-relative" for="${user.id}">
+                        <img
+                            id="img${user.id}"
+                            src="${user.image}"
+                            class="rounded img-thumbnail d-block"
+                            alt="profileImage"
+                            style="cursor: pointer; object-fit: cover; position: relative"
+                            for="${user.id}"
+                        />
+                    </label>
+                    <input hidden id="${user.id}" type="file" accept="/image/*" onchange="handleUpdateImage(event)" />
+                </div>
+            </div>
+            <div style="height:50%">
+                <div class="input-group mb-3">
+                     <input type="text" class="w-100 form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1" value="${user.name}" id="name${user.id}">
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="w-100 form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" value='${user.email}' id="email${user.id}">
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="w-100 form-control" placeholder="Age" aria-label="Age" aria-describedby="basic-addon1" value='${user.age}' id="age${user.id}">
+                </div>
+            </div>
         </div>
-        <div class="input-group mb-3">
-        <input type="text" class="w-100 form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" value='${user.email}' id="email${user.id}">
-        </div>
-        <div class="input-group mb-3">
-        <input type="text" class="w-100 form-control" placeholder="Age" aria-label="Age" aria-describedby="basic-addon1" value='${user.age}' id="age${user.id}">
-        </div></div>
         <div>
-        <button class="btn btn-primary" id=${user.id} onclick="handleUpdateUser(event)">Update</button>
-        <button class="btn btn-primary" id=${user.id} onclick="handleDeleteUser(event)">Delete</button>
+            <button class="btn btn-primary" id=${user.id} onclick="handleUpdateUser(event)">Update</button>
+            <button class="btn btn-danger" id=${user.id} onclick="handleDeleteUser(event)">Delete</button>
         </div>
             `;
         userCard.append(userCardBody);
@@ -31,15 +55,31 @@ const showUser = (userData) => {
 const handleUploadImage = async (e) => {
     const apiUrl = localStorage.getItem("apiUrl");
     const file = e.target.files;
-    console.log(file);
     const response = await fetch(`${apiUrl}/uploadImage`, {
         method: "POST",
         headers: { "Content-Type": "image/jpg" },
         body: file[0],
     });
     const { fileName, type } = await response.json();
-    const profileImage = (document.querySelector("#profile").src = `/userImage/${fileName}.${type}`);
-    console.log(profileImage);
+    profileImage.src = `/userImage/${fileName}.${type}`;
+    plusIcon.style.display = "none";
+};
+
+const handleUpdateImage = async (e) => {
+    const apiUrl = localStorage.getItem("apiUrl");
+    const id = e.target.id;
+    console.log(id);
+    const file = e.target.files;
+    console.log(file);
+    const response = await fetch(`${apiUrl}/updateImage/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "image/jpg" },
+        body: file[0],
+    });
+    const { updateProfileId, type } = await response.json();
+    console.log(updateProfileId, type);
+    const updateProfile = document.getElementById(`img${id}`);
+    updateProfile.src = `/userImage/${updateProfileId}.${type}`;
 };
 
 const getUser = async () => {
@@ -57,11 +97,12 @@ getUser();
 
 const handleCreateRegister = async () => {
     const apiUrl = localStorage.getItem("apiUrl");
-    const name = document.querySelector("#name").value;
-    const email = document.querySelector("#email").value;
-    const age = document.querySelector("#age").value;
+    const newName = nameTag.value;
+    const newEmail = emailTag.value;
+    const newAge = ageTag.value;
+    const newImage = String(profileImage.src).split("/").slice(-1);
 
-    const newUser = { name, email, age };
+    const newUser = { name: newName, email: newEmail, age: newAge, image: `/userImage/${newImage}` };
     const response = await fetch(`${apiUrl}/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -69,6 +110,11 @@ const handleCreateRegister = async () => {
     });
     const userData = await response.json();
     showUser(userData);
+    nameTag.value = "";
+    emailTag.value = "";
+    ageTag.value = "";
+    profileImage.src = "/userImage/default.webp";
+    plusIcon.style.display = "block";
 };
 
 const handleUpdateUser = async (e) => {

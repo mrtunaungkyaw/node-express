@@ -6,9 +6,9 @@ const userRouter = express.Router();
 userRouter.use(bodyParser.json());
 
 let users = [
-    { id: uuidv4(), name: "Tun", email: "tun@gmail.com", age: 20 },
-    { id: uuidv4(), name: "Aung", email: "aung@gmail.com", age: 26 },
-    { id: uuidv4(), name: "Kyaw", email: "kyaw@gmail.com", age: 28 },
+    { id: uuidv4(), name: "Tun", email: "tun@gmail.com", age: 20, image: "/userImage/user1.jpg" },
+    { id: uuidv4(), name: "Aung", email: "aung@gmail.com", age: 26, image: "/userImage/user2.avif" },
+    { id: uuidv4(), name: "Kyaw", email: "kyaw@gmail.com", age: 28, image: "/userImage/user3.avif" },
 ];
 
 userRouter.use(express.json());
@@ -19,8 +19,8 @@ userRouter
         res.send(users);
     })
     .post((req: Request, res: Response) => {
-        const { name, email, age } = req.body;
-        const user = { id: uuidv4(), name, email, age };
+        const { name, email, age, image } = req.body;
+        const user = { id: uuidv4(), name, email, age, image };
         users.push(user);
         res.send(users);
     });
@@ -29,13 +29,12 @@ userRouter
     .route("/:id")
     .put((req: Request, res: Response) => {
         const { id } = req.params;
-        const { name, email, age } = req.body;
-        users = users.map((user) => (user.id === id ? { id, name, email, age } : user));
+        const { name, email, age, image } = req.body;
+        users = users.map((user) => (user.id === id ? { id, name, email, age, image } : user));
         res.send(users);
     })
     .delete((req: Request, res: Response) => {
         const { id } = req.params;
-        console.log(id);
         users = users.filter((user) => user.id !== id);
         res.send(users);
     });

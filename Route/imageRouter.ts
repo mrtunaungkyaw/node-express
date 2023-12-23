@@ -10,13 +10,22 @@ imageRouter.use(bodyParser.json());
 imageRouter.use(express.json());
 
 imageRouter.route("/").post((req: Request, res: Response) => {
-    console.log(req.body);
     const fileName = uuidv4();
     const type = req.headers["content-type"]?.split("/")[1];
     const writeStream = fs.createWriteStream(path.join(__dirname, "..", "public", "userImage", `${fileName}.${type}`));
     req.pipe(writeStream);
-    console.log(writeStream.path);
     res.json({ fileName, type });
+});
+
+imageRouter.route("/:id").put((req: Request, res: Response) => {
+    const updateProfileId = req.params.id;
+    const type = req.headers["content-type"]?.split("/")[1];
+    const writeStream = fs.createWriteStream(
+        path.join(__dirname, "..", "public", "userImage", `${updateProfileId}.${type}`)
+    );
+    req.pipe(writeStream);
+    console.log(updateProfileId);
+    res.json({ updateProfileId, type });
 });
 
 export default imageRouter;

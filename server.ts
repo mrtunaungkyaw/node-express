@@ -38,6 +38,7 @@ app.use(bodyParser.json());
 app.use("/users", userRouter);
 
 app.use("/uploadImage", imageRouter);
+app.use("/updateImage", imageRouter);
 
 app.listen(PORT, () => {
     console.log(`server is listening on port ${PORT}`);
