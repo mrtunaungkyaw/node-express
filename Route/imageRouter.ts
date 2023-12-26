@@ -24,7 +24,6 @@ imageRouter.route("/:id").put((req: Request, res: Response) => {
         path.join(__dirname, "..", "public", "userImage", `${updateProfileId}.${type}`)
     );
     req.pipe(writeStream);
-    console.log(updateProfileId);
     res.json({ updateProfileId, type });
 });
 

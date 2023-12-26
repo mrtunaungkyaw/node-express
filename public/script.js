@@ -8,47 +8,34 @@ const showUser = (userData) => {
     const userListContainer = document.querySelector("#user-list-container");
     userListContainer.innerHTML = "";
     for (let i = 0; i < userData.length; i++) {
-        const userCard = document.createElement("div");
-        const userCardBody = document.createElement("div");
-        userCard.classList.add("card", "m-3", "w-25", "d-flex");
-        userCardBody.classList.add("card-body");
-        const user = userData[i];
-        userCardBody.innerHTML = `
-        <div style="height:90%">
-            <div class="d-flex justify-content-center" style="height:50%" >
-                <div class="w-50 h-100 d-flex align-item-center mb-3">
-                    <label class="position-relative" for="${user.id}">
-                        <img
-                            id="img${user.id}"
-                            src="${user.image}"
-                            class="rounded img-thumbnail d-block"
-                            alt="profileImage"
-                            style="cursor: pointer; object-fit: cover; position: relative"
-                            for="${user.id}"
-                        />
-                    </label>
-                    <input hidden id="${user.id}" type="file" accept="/image/*" onchange="handleUpdateImage(event)" />
-                </div>
+        const cardDiv = document.createElement("div");
+        cardDiv.classList.add("card", "p-3");
+        const users = userData[i];
+        cardDiv.innerHTML = `
+        <label class="position-relative h-100" for="input${users.id}">
+            <img id="img${users.id}" src="${users.image}" class="card-img-top img-thumbnail h-100 object-fit-cover" style="cursor: pointer" alt="profileImage" />
+        </label> 
+        <input accept="/image/*" hidden type="file" id="input${users.id}" onchange="handleUpdateImage(event)"/>
+        <div class="card-body">
+            <div class="mb-2">
+                <label for="name${users.id}" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name${users.id}" placeholder="Name" value="${users.name}" />
             </div>
-            <div style="height:50%">
-                <div class="input-group mb-3">
-                     <input type="text" class="w-100 form-control" placeholder="Name" aria-label="Name" aria-describedby="basic-addon1" value="${user.name}" id="name${user.id}">
-                </div>
-                <div class="input-group mb-3">
-                    <input type="text" class="w-100 form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" value='${user.email}' id="email${user.id}">
-                </div>
-                <div class="input-group mb-3">
-                    <input type="text" class="w-100 form-control" placeholder="Age" aria-label="Age" aria-describedby="basic-addon1" value='${user.age}' id="age${user.id}">
-                </div>
+            <div class="mb-2">
+                <label for="email${users.email}" class="form-label">Email</label>
+                <input type="email" class="form-control-plaintext" readonly id="email${users.id}" placeholder="name@example.com" value="${users.email}" />
+            </div>
+            <div class="mb-2">
+                <label for="age${users.age}" class="form-label">Age</label>
+                <input type="age" class="form-control" id="age${users.id}" placeholder="Age" value="${users.age}" />
             </div>
         </div>
-        <div>
-            <button class="btn btn-primary" id=${user.id} onclick="handleUpdateUser(event)">Update</button>
-            <button class="btn btn-danger" id=${user.id} onclick="handleDeleteUser(event)">Delete</button>
+        <div class="d-flex justify-content-end ">
+            <button id="delete${users.id}" class="btn btn-danger me-3" onclick="handleDeleteUser(event)">Delete</button>
+            <button id="${users.id}" class="btn btn-primary" onclick="handleUpdateUser(event)">Update</button>
         </div>
-            `;
-        userCard.append(userCardBody);
-        userListContainer.append(userCard);
+        `;
+        userListContainer.append(cardDiv);
     }
 };
 
@@ -67,18 +54,16 @@ const handleUploadImage = async (e) => {
 
 const handleUpdateImage = async (e) => {
     const apiUrl = localStorage.getItem("apiUrl");
-    const id = e.target.id;
-    console.log(id);
-    const file = e.target.files;
-    console.log(file);
+    // get id slice (input) text remove
+    const id = e.target.id.slice(5, e.target.id.length);
+    const file = e.target.files[0];
     const response = await fetch(`${apiUrl}/updateImage/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "image/jpg" },
-        body: file[0],
+        body: file,
     });
     const { updateProfileId, type } = await response.json();
-    console.log(updateProfileId, type);
-    const updateProfile = document.getElementById(`img${id}`);
+    const updateProfile = document.getElementById(`img${updateProfileId}`);
     updateProfile.src = `/userImage/${updateProfileId}.${type}`;
 };
 
@@ -119,11 +104,15 @@ const handleCreateRegister = async () => {
 
 const handleUpdateUser = async (e) => {
     const id = e.target.id;
+    const getUpdateImage = document.querySelector(`#img${id}`).src;
+    const updateImage = String(getUpdateImage).split("/").slice(-1);
     const updateName = document.querySelector(`#name${id}`).value;
     const updateEmail = document.querySelector(`#email${id}`).value;
     const updateAge = document.querySelector(`#age${id}`).value;
 
-    const updateUser = { name: updateName, email: updateEmail, age: updateAge };
+    console.log(updateImage, updateName, updateEmail, updateAge);
+
+    const updateUser = { image: updateImage, name: updateName, email: updateEmail, age: updateAge };
 
     const apiUrl = localStorage.getItem("apiUrl");
     const response = await fetch(`${apiUrl}/users/${id}`, {
@@ -132,11 +121,12 @@ const handleUpdateUser = async (e) => {
         body: JSON.stringify(updateUser),
     });
     const userData = await response.json();
+    showUser(userData);
 };
 
 const handleDeleteUser = async (e) => {
     const apiUrl = localStorage.getItem("apiUrl");
-    const id = e.target.id;
+    const id = e.target.id.slice(6, e.target.id.length);
     const response = await fetch(`${apiUrl}/users/${id}`, {
         method: "DELETE",
     });

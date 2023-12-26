@@ -30,7 +30,7 @@ userRouter
     .put((req: Request, res: Response) => {
         const { id } = req.params;
         const { name, email, age, image } = req.body;
-        users = users.map((user) => (user.id === id ? { id, name, email, age, image } : user));
+        users = users.map((user) => (user.id === id ? { id, name, email, age, image: `/userImage/${image}` } : user));
         res.send(users);
     })
     .delete((req: Request, res: Response) => {
