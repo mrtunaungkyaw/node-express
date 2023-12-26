@@ -10,6 +10,7 @@ const app = express();
 const PORT = 3000;
 
 const apiUrl = process.env.API_URL;
+console.log(apiUrl);
 
 const html = `
 <!DOCTYPE html>
