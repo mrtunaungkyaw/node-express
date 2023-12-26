@@ -74,6 +74,7 @@ const getUser = async () => {
         const userData = await response.json();
         showUser(userData);
     } else {
+        console.log("hello");
         window.location.href = "/api";
     }
 };
