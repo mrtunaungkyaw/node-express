@@ -1,6 +1,6 @@
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import express from "express";
+import express, { Request, Response } from "express";
 import imageRouter from "./Route/imageRouter";
 import userRouter from "./Route/userRouter";
 
@@ -31,9 +31,9 @@ const html = `
 app.use(express.static("public"));
 app.use(bodyParser.json());
 
-// app.get("/api", (req: Request, res: Response) => {
-//     res.send(html);
-// });
+app.get("/api", (req: Request, res: Response) => {
+    res.send(html);
+});
 
 app.use("/users", userRouter);
 
