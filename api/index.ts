@@ -1,8 +1,8 @@
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
-import imageRouter from "./Route/imageRouter";
-import userRouter from "./Route/userRouter";
+import imageRouter from "../Route/imageRouter";
+import userRouter from "../Route/userRouter";
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ const html = `
     <title>Document</title>
 </head>
 <body>
-    <script type=text/javascript>
+    <script type="text/javascript">
         localStorage.setItem("apiUrl", "${apiUrl}")
         window.location.href = "/"
     </script>
