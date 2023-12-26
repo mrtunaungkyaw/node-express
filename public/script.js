@@ -70,12 +70,10 @@ const handleUpdateImage = async (e) => {
 const getUser = async () => {
     const apiUrl = localStorage.getItem("apiUrl");
     if (apiUrl) {
-        console.log("if", apiUrl);
         const response = await fetch(`${apiUrl}/users`);
         const userData = await response.json();
         showUser(userData);
     } else {
-        console.log("else", apiUrl);
         window.location.href = "/api";
     }
 };
