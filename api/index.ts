@@ -36,10 +36,10 @@ app.get("/api", (req: Request, res: Response) => {
     res.send(html);
 });
 
-app.use("/users", userRouter);
+app.use("/api/users", userRouter);
 
-app.use("/uploadImage", imageRouter);
-app.use("/updateImage", imageRouter);
+app.use("/api/uploadImage", imageRouter);
+app.use("/api/updateImage", imageRouter);
 
 app.listen(PORT, () => {
     console.log(`server is listening on port ${PORT}`);
