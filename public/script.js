@@ -47,8 +47,7 @@ const handleUploadImage = async (e) => {
         headers: { "Content-Type": "image/jpg" },
         body: file[0],
     });
-    const { fileName, type, __dirname } = await response.json();
-    console.log(__dirname);
+    const { fileName, type } = await response.json();
     profileImage.src = `/userImage/${fileName}.${type}`;
     plusIcon.style.display = "none";
 };
@@ -63,8 +62,7 @@ const handleUpdateImage = async (e) => {
         headers: { "Content-Type": "image/jpg" },
         body: file,
     });
-    const { updateProfileId, type, __dirname } = await response.json();
-    console.log(__dirname);
+    const { updateProfileId, type } = await response.json();
     const updateProfile = document.getElementById(`img${updateProfileId}`);
     updateProfile.src = `/userImage/${updateProfileId}.${type}`;
 };

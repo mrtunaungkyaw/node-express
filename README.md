@@ -9,3 +9,7 @@
 -   _npm i -D ts-node-dev_
 
 check api in locastorage for Deployment or Production
+
+-   image upload and update is working local only
+-   spaces less
+-   for testing only
