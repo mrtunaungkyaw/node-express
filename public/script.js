@@ -47,7 +47,8 @@ const handleUploadImage = async (e) => {
         headers: { "Content-Type": "image/jpg" },
         body: file[0],
     });
-    const { fileName, type } = await response.json();
+    const { fileName, type, __dirname } = await response.json();
+    console.log(__dirname);
     profileImage.src = `/userImage/${fileName}.${type}`;
     plusIcon.style.display = "none";
 };
@@ -62,7 +63,8 @@ const handleUpdateImage = async (e) => {
         headers: { "Content-Type": "image/jpg" },
         body: file,
     });
-    const { updateProfileId, type } = await response.json();
+    const { updateProfileId, type, __dirname } = await response.json();
+    console.log(__dirname);
     const updateProfile = document.getElementById(`img${updateProfileId}`);
     updateProfile.src = `/userImage/${updateProfileId}.${type}`;
 };
@@ -70,6 +72,7 @@ const handleUpdateImage = async (e) => {
 const getUser = async () => {
     const apiUrl = localStorage.getItem("apiUrl");
     if (apiUrl) {
+        console.log(apiUrl);
         const response = await fetch(`${apiUrl}/users`);
         const userData = await response.json();
         showUser(userData);

@@ -14,7 +14,8 @@ imageRouter.route("/").post((req: Request, res: Response) => {
     const type = req.headers["content-type"]?.split("/")[1];
     const writeStream = fs.createWriteStream(path.join(__dirname, "..", "public", "userImage", `${fileName}.${type}`));
     req.pipe(writeStream);
-    res.json({ fileName, type });
+    console.log("upload", __dirname);
+    res.json({ fileName, type, __dirname });
 });
 
 imageRouter.route("/:id").put((req: Request, res: Response) => {
@@ -24,7 +25,8 @@ imageRouter.route("/:id").put((req: Request, res: Response) => {
         path.join(__dirname, "..", "public", "userImage", `${updateProfileId}.${type}`)
     );
     req.pipe(writeStream);
-    res.json({ updateProfileId, type });
+    console.log("update", __dirname);
+    res.json({ updateProfileId, type, __dirname });
 });
 
 export default imageRouter;
